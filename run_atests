@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+this_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+### settings ###################################################################
+
+: ${IS_CI=""}
+
+### helpers ####################################################################
+
+_portable_timeout() {
+  perl -e 'alarm shift; exec @ARGV' "$@";
+}
+
+_wait_compose_ready() {
+  local ready_msg=".* Server startup complete"
+  while ! docker-compose logs "rabbitmq" | grep "$ready_msg" >/dev/null; do
+    echo -n '.'
+    sleep 0.2
+  done
+}
+export -f _wait_compose_ready
+
+start_dompose() {
+  docker-compose up -d --build
+  echo "### Waiting for docker-compose services to start"
+  if ! _portable_timeout 60 bash -c _wait_compose_ready 2>/dev/null; then
+    echo "Error: docker-compose stack starting timeouted, exiting."
+    cleanup_compose
+    exit 124  # same as GNU coreutils `timeout` exit status
+  fi
+  echo "... ready for the tests"
+}
+
+cleanup_compose() {
+  docker-compose down
+}
+
+setup_robot_framework() {
+  export PATH="$PATH:$HOME/.local/bin"
+  pip install --user --upgrade robotframework
+}
+
+### main #######################################################################
+
+export PYTHONPATH="$PYTHONPATH:$this_path/src"
+pip install --quiet -r "$this_path/requirements.txt"
+
+trap "cleanup_compose &" SIGINT SIGTERM
+start_dompose
+
+setup_robot_framework
+robot --outputdir "$this_path/results" ${@:-$this_path/atests}
+
+[[ -n "$IS_CI" ]] && cleanup_compose

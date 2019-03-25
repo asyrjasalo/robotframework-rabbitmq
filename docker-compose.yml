@@ -1,0 +1,21 @@
+version: "2"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.7-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+      RABBITMQ_DEFAULT_VHOST: /
+      RABBITMQ_ERLANG_COOKIE: cluster_cookie
+    networks:
+      - rabbitmq_cluster
+    ports:
+      - 5672:5672
+      - 15672:15672
+    #volumes:
+    #  - ./enabled_plugins:/etc/rabbitmq/enabled_plugins
+
+networks:
+  rabbitmq_cluster:
+    driver: bridge
