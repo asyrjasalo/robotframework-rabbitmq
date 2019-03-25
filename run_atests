@@ -43,7 +43,7 @@ setup_robot_framework() {
 
 ### main #######################################################################
 
-[[ ! -d "$this_path/atests" ]] && echo "No atests found" ; exit 0
+[[ ! -d "$this_path/atests" ]] && (echo "No atests found" ; exit 0)
 
 trap "cleanup_compose &" SIGINT SIGTERM
 start_dompose
