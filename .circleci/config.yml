@@ -9,8 +9,8 @@ jobs:
       - checkout
 
       - run:
-          name: Run tests for docker-compose
-          command: IS_CI=true ./run_atests
+          name: Start docker compose stack and run tests
+          command: IS_CI=true ./run_atests --xunit xunit.xml
 
       - store_test_results:
           path: results/
