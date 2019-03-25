@@ -52,4 +52,8 @@ start_dompose
 setup_robot_framework
 robot --outputdir "$this_path/results" ${@:-$this_path/atests}
 
-[[ -n "$IS_CI" ]] && cleanup_compose
+if [[ -n "$IS_CI" ]] ; then
+  cleanup_compose
+else
+  exit 0
+fi

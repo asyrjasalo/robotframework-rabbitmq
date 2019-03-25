@@ -10,7 +10,7 @@ jobs:
 
       - run:
           name: Run tests for docker-compose
-          command: ./run_atests
+          command: IS_CI=true ./run_atests
 
       - store_test_results:
           path: results/
