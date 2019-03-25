@@ -50,7 +50,7 @@ trap "cleanup_compose &" SIGINT SIGTERM
 start_dompose
 
 setup_robot_framework
-robot --outputdir "$this_path/results" ${@:-$this_path/atests}
+robot --outputdir "$this_path/results" --xunit xunit.xml ${@:-$this_path/atests}
 
 if [[ -n "$IS_CI" ]] ; then
   cleanup_compose
