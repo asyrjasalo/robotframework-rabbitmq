@@ -43,8 +43,7 @@ setup_robot_framework() {
 
 ### main #######################################################################
 
-export PYTHONPATH="$PYTHONPATH:$this_path/src"
-pip install --quiet -r "$this_path/requirements.txt"
+[[ ! -d "$this_path/atests" ]] && echo "No atests found" ; exit 0
 
 trap "cleanup_compose &" SIGINT SIGTERM
 start_dompose
