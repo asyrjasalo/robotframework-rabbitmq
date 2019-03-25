@@ -21,6 +21,6 @@ jobs:
 
 workflows:
   version: 2
-  rfdocker:
+  atests:
     jobs:
       - build
