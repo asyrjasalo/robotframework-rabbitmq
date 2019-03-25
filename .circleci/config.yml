@@ -9,10 +9,10 @@ jobs:
       - checkout
 
       - run:
-          name: Install requirements
+          name: Install Python requirements
           command: |
-            export PYTHONPATH="$PYTHONPATH:$this_path/src"
-            pip install --quiet -r "$this_path/requirements.txt"
+            export PYTHONPATH="$PYTHONPATH:$PWD/src"
+            pip install -r requirements.txt
 
       - run:
           name: Start docker compose stack and run tests
