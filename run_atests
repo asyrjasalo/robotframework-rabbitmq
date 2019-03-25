@@ -43,7 +43,9 @@ setup_robot_framework() {
 
 ### main #######################################################################
 
-[[ ! -d "$this_path/atests" ]] && (echo "No atests found" ; exit 0)
+if [[ ! -d "$this_path/atests" ]] ; then
+  echo "No atests found" ; exit 0
+fi
 
 trap "cleanup_compose &" SIGINT SIGTERM
 start_dompose
